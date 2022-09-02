@@ -1,11 +1,10 @@
-
 from shorthands import *
 import pandas as pd
 
-def simulate(Hfluid, Lfluid, T1, T5, T7, T_overlap, n_isH, n_isL, Q_ref, Q1, Q3, Q5, Q7):
+def simulate(Hfluid, Lfluid, T1, T5, T_amb, T_gap, T_overlap, n_isH, n_isL, Q_ref, Q1, Q3, Q5, Q7):
     # Lower Temperature Cycle
-    P1, h1, s1 = PHS_from_TQ(T1, Q1, Lfluid)
     P5, h5, s5 = PHS_from_TQ(T5, Q5, Hfluid)
+    P1, h1, s1 = PHS_from_TQ(T1, Q1, Lfluid)
     T3 = T5 + T_overlap
     P3, h3, s3 = PHS_from_TQ(T3, Q3, Lfluid) 
     P2 = P3
@@ -18,6 +17,7 @@ def simulate(Hfluid, Lfluid, T1, T5, T7, T_overlap, n_isH, n_isL, Q_ref, Q1, Q3,
     Q4 = Q_from_PH(P4, h4, Lfluid)
 
     # Higher Temperature Cycle
+    T7 = T_amb + T_gap
     P7, h7, s7 = PHS_from_TQ(T7, Q7, Hfluid)
     P6 = P7
     h6s = cp.PropsSI('H', 'S', s5, 'P', P6, Hfluid)
