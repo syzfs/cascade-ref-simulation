@@ -26,16 +26,18 @@ def simulate(Hfluid, Lfluid, T1, T5, T_amb, T_gap, T_overlap, n_isH, n_isL, Q_re
     h8 = h7
     P8 = P5
     s8, T8 = ST_from_PH(P8, h8, Hfluid)
-    Q8 = Q_from_PH(P8, h8, Lfluid)
+    Q8 = Q_from_PH(P8, h8, Hfluid)
 
     # Mass Flow Rates, Performance, COPs
     mdotL = Q_ref/(h1-h4)
     mdotH = (h2-h3)*mdotL/(h5-h8)
     W_compL = mdotL*(h2-h1)
     W_compH = mdotH*(h6-h5)
-    Q_out = mdotL*(h6-h7)
+    W_inNET = W_compH+W_compL
+    Q_out = mdotH*(h6-h7)
     copL, copH = (h1-h4)/(h2-h1), (h5-h8)/(h6-h5)
-    copNET = (copL*copH)/(1+copL+copH)
+    # copNET = (copL*copH)/(1+copL+copH)
+    copNET = Q_ref/W_inNET
 
     # Compile
     streams = pd.DataFrame(columns=['h', 's', 'T', 'P', 'Q', 'mdot'])
@@ -49,7 +51,7 @@ def simulate(Hfluid, Lfluid, T1, T5, T_amb, T_gap, T_overlap, n_isH, n_isL, Q_re
     streams.index.rename('Stream', inplace=True)
     results = pd.DataFrame([['LTC work input (in W)', W_compL],
                             ['HTC work input (in W)', W_compH],
-                            ['Total work input (in W)', W_compH+W_compL],
+                            ['Total work input (in W)', W_inNET],
                             ['Refrigeration effect (in W)', Q_ref],
                             ['Heat rejection (in W)', Q_out],
                             ['COP of LTC', copL],
