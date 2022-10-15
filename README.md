@@ -5,7 +5,7 @@ This repository contains the files used by Group 3, in Parts 2 & 3 of the Course
 cascade-ref-simulation
 ├── README.md         <- This file (added for the reader's convenience).
 |
-├── chx.py            <- Models the cascade heat exchanger after  
+├── chx.py            <- Physically models the cascade heat exchanger based on the simulation results.
 |
 ├── main.py           <- The only executable file.
 |                        Sets all the assumed input parameters.
