@@ -40,22 +40,3 @@ def capital(streams, results, area_NET, evap_heatflux):      # For CHX, we may h
     c_results.index += 1
     c_TOT = c_compL+c_evL+c_evapL+c_RefL+c_CHX+c_compH+c_evH+c_condH+c_RefH
     return c_results, c_TOT
-
-# def oNm(results, n_elH, n_elL, rate_el, c_TOT):
-#     # Extract Total Work Input from "results"
-#     W_inH, W_inL = results.iloc[0,1], results.iloc[1,1]
-#     # Assume that the system is operated non-stop for 355 days of the year (10 days for annual maintenance)
-#     o_E_inNET = ((W_inH/n_elH) + (W_inL/n_elL))*355*86400*rate_el
-#     m_NET = 0.1*c_TOT
-#     oNm_TOT = o_E_inNET+m_NET
-#     return oNm_TOT
-
-# def lifetime(c_TOT, oNm_TOT, d, n, sal):
-#     lcc = c_TOT
-#     for i in range(1,n):
-#         lcc += oNm_TOT/((1+d)**i)
-#     lcc -= sal/(1+d)**n
-#     return lcc
-
-# Q_refL = (results.iloc[3,1] + results.iloc[0,1])/3516.85    # LTC refrigeration in TR
-# Q_refH = (Q_refL + results.iloc[1,1])/3516.85               # HTC refrigeration in TR
