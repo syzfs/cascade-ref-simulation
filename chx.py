@@ -1,14 +1,13 @@
 from shorthands import *
 from ht import *
-# import numpy as np
 import math
 import pandas as pd
 
-def compute_area(streams, Hfluid, Lfluid, d_pipe, chev_theta):
+def compute_area(streams, T_overlap, Hfluid, Lfluid, d_pipe, chev_theta):
     area_NET = 0                    # Initialise the summation term
 
     # Region 1: LTC gas, HTC mixture
-    print('\nRegion 1: LTC fluid is a pure gas, HTC fluid is a mixture')
+    # print('\nRegion 1: LTC fluid is a pure gas, HTC fluid is a mixture')
     mdot_L = streams['mdot'][2]
     P_L = streams['P'][2]                           # Pressure in LTC stays at P2, throughout the CHX
     h2 = streams['h'][2]                            # Specific enthalpy of LTC fluid at the Region 1 inlet
@@ -52,19 +51,19 @@ def compute_area(streams, Hfluid, Lfluid, d_pipe, chev_theta):
     area_R1 = Qdot_R1/(U_R1*LMTD_R1)
     # print('Area obtained for Region 1 =',str(area_R1),'m^2')
 
-    results_R1 = pd.DataFrame([['Rate of HT in Region 1 (W)', Qdot_R1],
-                               ['Convective HT coefficient on LTC side (W/m^2 K)', h_L_R1],
-                               ['Convective HT coefficient on HTC side (W/m^2 K)', h_H_R1],     
-                               ['Overall HT coefficient (W/m^2 K)', U_R1],
-                               ['Logarithmic mean temperature difference (K)', LMTD_R1],
-                               ['Thus, total area of Region 1 (m^2)', area_R1]], columns=['Parameter', 'Value'])
+    results_R1 = pd.DataFrame([['Rate of HT in Region 1 (W)', round(Qdot_R1,3)],
+                            #    ['Convective HT coefficient on LTC side (W/m^2 K)', h_L_R1],
+                            #    ['Convective HT coefficient on HTC side (W/m^2 K)', h_H_R1],     
+                               ['Overall HT coefficient (W/m^2 K)', round(U_R1,3)],
+                               ['Logarithmic mean temperature difference (K)', round(LMTD_R1,3)],
+                               ['Thus, total area of Region 1 (m^2)', round(area_R1,3)]], columns=['Parameter', 'Value'])
     results_R1.index += 1
-    print(results_R1)
+    # print(results_R1)
 
     area_NET += area_R1
 
     # Region 2: LTC mixture, HTC mixture
-    print('\nRegion 2: LTC fluid is a mixture, HTC fluid is a mixture')
+    # print('\nRegion 2: LTC fluid is a mixture, HTC fluid is a mixture')
     # Pressure in LTC stays at P2, Temperature stays at T3
     h3 = streams['h'][3]                            # Specific enthalpy of LTC fluid at Region 2 outlet
     Qdot_R2 = mdot_L*(h2_cool-h3)
@@ -85,21 +84,20 @@ def compute_area(streams, Hfluid, Lfluid, d_pipe, chev_theta):
 
     U_R2 = (h_L_R2*h_H_R2)/(h_L_R2+h_H_R2)                  # Found overall heat transfer coefficient in Region 1!
     # print('Thus, overall heat transfer coefficient in Region 1 =',str(U_R2),'W/(m^2 K)')
-    LMTD_R2 = 5                 # Simple phase change process, both temperature profiles are flat and parallel
+    LMTD_R2 = T_overlap         # Simple phase change process, both temperature profiles are flat and parallel
     # print('LMTD in Region 1 =',str(LMTD_R2),'K')
     area_R2 = Qdot_R2/(U_R2*LMTD_R2)
     # print('Area obtained for Region 1 =',str(area_R2),'m^2')
 
-    results_R2 = pd.DataFrame([['Rate of HT in Region 2 (W)', Qdot_R2],
-                               ['Convective HT coefficient on LTC side (W/m^2 K)', h_L_R2],
-                               ['Convective HT coefficient on HTC side (W/m^2 K)', h_H_R2],     
-                               ['Overall HT coefficient (W/m^2 K)', U_R2],
-                               ['Logarithmic mean temperature difference (K)', LMTD_R2],
-                               ['Thus, total area of Region 2 (m^2)', area_R2]], columns=['Parameter', 'Value'])
+    results_R2 = pd.DataFrame([['Rate of HT in Region 2 (W)', round(Qdot_R2,3)],
+                            #    ['Convective HT coefficient on LTC side (W/m^2 K)', h_L_R2],
+                            #    ['Convective HT coefficient on HTC side (W/m^2 K)', h_H_R2],     
+                               ['Overall HT coefficient (W/m^2 K)', round(U_R2,3)],
+                               ['Logarithmic mean temperature difference (K)', round(LMTD_R2,3)],
+                               ['Thus, total area of Region 2 (m^2)', round(area_R2,3)]], columns=['Parameter', 'Value'])
     results_R2.index += 1
-    print(results_R2)
+    # print(results_R2)
 
     area_NET += area_R2
-    
-    print('\nModelling complete. Total area required =',str(area_NET),'m^2')
-    return None
+    # print('\nModelling complete. Total area required =',str(round(area_NET,3)),'m^2')
+    return results_R1, results_R2, area_NET

@@ -41,22 +41,22 @@ def simulate(Hfluid, Lfluid, T1, T5, T_amb, T_gap, T_overlap, n_isH, n_isL, Q_re
 
     # Compile
     streams = pd.DataFrame(columns=['h', 's', 'T', 'P', 'Q', 'mdot'])
-    streams.h = [h1, h2, h3, h4, h5, h6, h7, h8]
-    streams.s = [s1, s2, s3, s4, s5, s6, s7, s8]
-    streams.T = [T1, T2, T3, T4, T5, T6, T7, T8]
-    streams.P = [P1, P2, P3, P4, P5, P6, P7, P8]
-    streams.Q = [Q1, '(superheated)', Q3, Q4, Q5, '(superheated)', Q7, Q8]
-    streams.mdot = [mdotL, mdotL, mdotL, mdotL, mdotH, mdotH, mdotH, mdotH]
+    streams['h'] = [h1, h2, h3, h4, h5, h6, h7, h8]
+    streams['s'] = [s1, s2, s3, s4, s5, s6, s7, s8]
+    streams['T'] = [T1, T2, T3, T4, T5, T6, T7, T8]
+    streams['P'] = [P1, P2, P3, P4, P5, P6, P7, P8]
+    streams['Q'] = [Q1, '(superheated)', Q3, Q4, Q5, '(superheated)', Q7, Q8]
+    streams['mdot'] = [mdotL, mdotL, mdotL, mdotL, mdotH, mdotH, mdotH, mdotH]
     streams.index += 1
     streams.index.rename('Stream', inplace=True)
-    results = pd.DataFrame([['LTC work input (in W)', W_compL],
-                            ['HTC work input (in W)', W_compH],
-                            ['Total work input (in W)', W_inNET],
-                            ['Refrigeration effect (in W)', Q_ref],
-                            ['Heat rejection (in W)', Q_out],
-                            ['COP of LTC', copL],
-                            ['COP of HTC', copH],
-                            ['Overall COP', copNET]], columns=['Parameter', 'Value'])
+    results = pd.DataFrame([['LTC work input (in W)', round(W_compL,3)],
+                            ['HTC work input (in W)', round(W_compH,3)],
+                            ['Total work input (in W)', round(W_inNET,2)],
+                            ['Refrigeration effect (in W)', round(Q_ref,3)],
+                            ['Heat rejection (in W)', round(Q_out,3)],
+                            ['COP of LTC', round(copL,3)],
+                            ['COP of HTC', round(copH,3)],
+                            ['Overall COP', round(copNET,3)]], columns=['Parameter', 'Value'])
     results.index += 1
     # return streams, W_compL, W_compH, Q_out, copH, copL, copNET
     return streams, results

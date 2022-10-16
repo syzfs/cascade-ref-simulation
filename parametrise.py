@@ -14,5 +14,4 @@ def T_amb(Hfluid, Lfluid, T1, T5, T_amb, T_gap, T_overlap, n_isH, n_isL, Q_ref, 
     plt.xlabel('Ambient Temperature (in ℃)')
     plt.ylabel('Overall COP')
     plt.savefig('paraTamb')
-    plt.show()
     return
