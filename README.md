@@ -6,8 +6,10 @@ cascade-ref-simulation
 ├── README.md         <- This file (added for the reader's convenience).
 |
 ├── chx.py            <- Physically models the cascade heat exchanger based on the simulation results.
+                         Invoked by executing main.py.
 |
 ├── cost.py           <- Computes the total capital cost using suitable cost functions.
+                         Invoked by executing main.py.
 |
 ├── main.py           <- The only executable file.
 |                        Sets all the assumed input parameters.
@@ -31,4 +33,4 @@ cascade-ref-simulation
 └── CP3 G03.pdf       <- The report for Part 3 of the project (techno-economic analysis).
 ```
 
-**Python libraries needed:** `CoolProp`, `ht`, `matplotlib`, `numpy`, `pandas`
+**Python libraries needed:** `CoolProp`, `matplotlib`, `numpy`, `pandas`

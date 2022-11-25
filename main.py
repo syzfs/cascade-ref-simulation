@@ -19,15 +19,18 @@ Q3, Q7 = 0, 0       # (ideal saturated liquid streams)
 assumptions = (Hfluid, Lfluid, T1, T5, T_amb, T_gap, T_overlap, n_isH, n_isL, Q_ref, Q1, Q3, Q5, Q7)
 
 # CHX Modelling-related assumptions
-d_pipe = 0.04       # internal pipe diameter, in m
-chev_theta = 45     # chevron angle of plate, in degrees
+d_hyd = 0.0075          # hydraulic diameter for the CHX, in m
 
 # Costs-related assumptions
-evap_heatflux = 10**6       # achievable heat extraction rate in W/m^2
+area_HTCC = 100*0.186*0.613     # Heat Transfer Area of chosen condenser model
+area_LTCE = 40*0.118*0.525      # Heat Transfer Area of chosen evaporator model
 
 # Simulation, Tabulation, Evaluation
-print(sep*80)
+print('\n'+sep*80)
 print('EN 317 Course Project (Group 3): Cascade Refrigeration Cycle')
+print(sep*80)
+print('NOTE: Printed results will be rounded for better visibility,')
+print('without losing the precision of all the actual computations.')
 print(sep*80)
 try:
     print('Initialising simulation model with given assumptions...')
@@ -51,26 +54,26 @@ print(sep*80)
 time.sleep(0.5)
 try:
     print('Initialising modelling of cascade heat exchanger...')
-    results_R1, results_R2, area_NET = chx.compute_area(streams, T_overlap, Hfluid, Lfluid, d_pipe, chev_theta)
+    results_R1, results_R2, area_CHX = chx.compute_area(streams, T_overlap, Hfluid, Lfluid, d_hyd)
     print('\nModelling complete. Showing results...')
     print('\nRegion 1: LTC fluid is a pure gas, HTC fluid is a mixture')
     print(results_R1)
     print('\nRegion 2: LTC fluid is a mixture, HTC fluid is a mixture')
     print(results_R2)
-    print('\nThus, total area required =',str(round(area_NET,3)),'m^2')
+    print('\nThus, total area required =',str(round(area_CHX,3)),'m^2')
 except:
     print('\nModelling failed, try again!')
 print(sep*80)
 time.sleep(0.5)
 try:
     print('Initialising capital cost calculation...')
-    c_results, c_TOT = cost.capital(streams, results, area_NET, evap_heatflux)
+    c_results, c_TOT = cost.capital(streams, results, area_CHX, area_HTCC, area_LTCE)
     print('\Calculation complete. Showing results...\n')
     print(c_results)
     print('\nThus, total capital cost = ₹',str(round(c_TOT,2)))
+    print('After rounding off insignificant digits = ₹',str(round(c_TOT, -5)))
 except:
     print('\nCapital cost calculation failed, try again!')
 print(sep*80)
-print('NOTE: Printed outputs have been rounded for better visibility,')
-print('without reducing the precision of all the actual computations.')
-print(sep*80)
+print('Execution complete.')
+print(sep*80+'\n')
